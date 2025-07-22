@@ -1,0 +1,5 @@
+The css of each of the admin pages are the same ...I couldn't run the code from manage.py
+so I created each of them separately
+you can clear all the css and maintain just one then link them to each of the pages.
+I haven't created the form for admin-fda-dehydration-service yet
+The pages are not linked to the admin-dashboard.html yet

@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Business Registration Applications</title>
+    <title>Consultation Management</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <!-- <link href="./admin.css" rel="stylesheet"> -->
     <style>
         :root {
             --primary-color: #2c3e50;
@@ -296,8 +295,69 @@
             <button class="btn btn-outline-light mb-3" onclick="history.back()">
                 <i class="fas fa-arrow-left"></i> Back
             </button>
-            <h1 class="page-title">Business Registration Applications</h1>
-            <p class="page-subtitle">Process and Monitor Business Registration Requests</p>
+            <h1 class="page-title">Consultation Management</h1>
+            <p class="page-subtitle">Schedule, Track, and Manage Client Consultations</p>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="row stats-cards">
+            <div class="col-md-3 col-6 mb-3">
+                <div class="stat-card">
+                    <div class="stat-number text-info">18</div>
+                    <div class="stat-label">Scheduled</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-3">
+                <div class="stat-card">
+                    <div class="stat-number text-success">42</div>
+                    <div class="stat-label">Completed</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-3">
+                <div class="stat-card">
+                    <div class="stat-number text-danger">5</div>
+                    <div class="stat-label">Cancelled</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-3">
+                <div class="stat-card">
+                    <div class="stat-number text-warning">GHC12,450</div>
+                    <div class="stat-label">Revenue (Month)</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Calendar View -->
+        <div class="calendar-view">
+            <h3 class="section-title">Today's Schedule</h3>
+            <div class="row">
+                <div class="col-md-2">
+                    <h6 class="text-muted">Morning</h6>
+                    <div class="time-slot available">9:00 AM</div>
+                    <div class="time-slot booked">10:00 AM</div>
+                    <div class="time-slot available">11:00 AM</div>
+                </div>
+                <div class="col-md-2">
+                    <h6 class="text-muted">Afternoon</h6>
+                    <div class="time-slot booked">1:00 PM</div>
+                    <div class="time-slot available">2:00 PM</div>
+                    <div class="time-slot booked">3:00 PM</div>
+                </div>
+                <div class="col-md-2">
+                    <h6 class="text-muted">Evening</h6>
+                    <div class="time-slot available">4:00 PM</div>
+                    <div class="time-slot available">5:00 PM</div>
+                    <div class="time-slot booked">6:00 PM</div>
+                </div>
+                <div class="col-md-6">
+                    <h6 class="text-muted">Legend</h6>
+                    <div class="d-flex gap-3 flex-wrap">
+                        <span><span class="time-slot available d-inline-block" style="margin: 0;">Available</span></span>
+                        <span><span class="time-slot booked d-inline-block" style="margin: 0;">Booked</span></span>
+                        <span><span class="time-slot d-inline-block" style="margin: 0;">Open</span></span>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Search and Filter Section -->
@@ -305,66 +365,66 @@
             <div class="row g-3">
                 <div class="col-md-6">
                     <div class="search-box">
-                        <input type="text" class="form-control" placeholder="Search by Business Name, Registration Type...">
+                        <input type="text" class="form-control" id="searchInput" placeholder="Search by Client Name, Consultation Type...">
                         <button class="btn btn-primary search-btn">
                             <i class="fas fa-search"></i> Search
                         </button>
                     </div>
                 </div>
                 <div class="col-md-2">
-                    <select class="form-select filter-select">
+                    <select class="form-select filter-select" id="statusFilter">
                         <option value="">All Status</option>
-                        <option value="under-review">Under Review</option>
-                        <option value="approved">Approved</option>
-                        <option value="rejected">Rejected</option>
-                        <option value="pending">Pending Documents</option>
+                        <option value="scheduled">Scheduled</option>
+                        <option value="completed">Completed</option>
+                        <option value="cancelled">Cancelled</option>
+                        <option value="rescheduled">Rescheduled</option>
                     </select>
                 </div>
                 <div class="col-md-2">
-                    <select class="form-select filter-select">
+                    <select class="form-select filter-select" id="typeFilter" >
                         <option value="">All Types</option>
-                        <option value="new">New</option>
-                        <option value="renewal">Renewal</option>
-                        <option value="amendment">Amendment</option>
+                        <option value="initial">Initial</option>
+                        <option value="follow-up">Follow-up</option>
+                        <option value="technical">Technical</option>
                     </select>
                 </div>
                 <div class="col-md-2">
-                    <button class="btn btn-success add-btn w-100" data-bs-toggle="modal" data-bs-target="#businessRegistrationModal">
-                        <i class="fas fa-plus"></i> Register
+                    <button class="btn btn-success add-btn w-100" data-bs-toggle="modal" data-bs-target="#scheduleConsultationModal">
+                        <i class="fas fa-plus"></i> Schedule
                     </button>
                 </div>
             </div>
         </div>
 
-        <!-- Registration Applications Table Section -->
+        <!-- Consultations Table Section -->
         <div class="table-section">
-            <h3 class="section-title">Registration Applications</h3>
+            <h3 class="section-title">Scheduled Consultations</h3>
 
             <div class="table-responsive">
-                <table class="table custom-table">
+                <table class="table custom-table" id="consultationsTable">
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Registration ID</th>
-                            <th>Business Name</th>
-                            <th>Business Type</th>
-                            <th>Applicant Name</th>
-                            <th>Submission Date</th>
-                            <th>Registration Type</th>
+                            <th>Consultation ID</th>
+                            <th>Client Name</th>
+                            <th>Consultation Type</th>
+                            <th>Scheduled Date/Time</th>
+                            <th>Duration</th>
                             <th>Status</th>
+                            <th>Payment Status</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="consultationsTableBody">
                         <tr>
                             <td>1</td>
-                            <td>BR-20250624165259</td>
-                            <td>Global Tech Solutions</td>
-                            <td>Technology Services</td>
-                            <td>Alex Johnson</td>
-                            <td>2025-06-24 16:52</td>
-                            <td>New</td>
-                            <td><span class="badge status-under-review">Under Review</span></td>
+                            <td>CON-20250624165259</td>
+                            <td>Emily Davis - <em>Green Valley Farms</em></td>
+                            <td>Initial</td>
+                            <td>2025-06-25 10:00</td>
+                            <td>60 minutes</td>
+                            <td><span class="badge status-scheduled">Scheduled</span></td>
+                            <td><span class="badge payment-paid">Paid</span></td>
                             <td>
                                 <div class="action-buttons">
                                     <button class="btn btn-sm btn-outline-primary" title="View Details">
@@ -373,13 +433,13 @@
                                     <button class="btn btn-sm btn-outline-warning" title="Edit">
                                         <i class="fas fa-edit"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-outline-info" title="Generate Report">
+                                    <button class="btn btn-sm btn-outline-info" title="Generate Report" >
                                         <i class="fas fa-file-alt"></i>
                                     </button>
                                     <button class="btn btn-sm btn-outline-success" title="Message Client">
                                         <i class="fas fa-comment"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-outline-danger" title="Archive">
+                                    <button class="btn btn-sm btn-outline-danger" title="Archive" >
                                         <i class="fas fa-archive"></i>
                                     </button>
                                 </div>
@@ -387,13 +447,13 @@
                         </tr>
                         <tr>
                             <td>2</td>
-                            <td>BR-20250617061408</td>
-                            <td>Fresh Market Enterprises</td>
-                            <td>Retail/Food</td>
-                            <td>Sarah Wilson</td>
-                            <td>2025-06-17 06:14</td>
-                            <td>Renewal</td>
-                            <td><span class="badge status-approved">Approved</span></td>
+                            <td>CON-20250617061408</td>
+                            <td>Robert Smith - <em>Organic Foods Inc</em></td>
+                            <td>Follow-up</td>
+                            <td>2025-06-18 14:30</td>
+                            <td>30 minutes</td>
+                            <td><span class="badge status-completed">Completed</span></td>
+                            <td><span class="badge payment-paid">Paid</span></td>
                             <td>
                                 <div class="action-buttons">
                                     <button class="btn btn-sm btn-outline-primary" title="View Details">
@@ -402,7 +462,7 @@
                                     <button class="btn btn-sm btn-outline-warning" title="Edit">
                                         <i class="fas fa-edit"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-outline-info" title="Generate Report">
+                                    <button class="btn btn-sm btn-outline-info" title="Generate Report" >
                                         <i class="fas fa-file-alt"></i>
                                     </button>
                                     <button class="btn btn-sm btn-outline-success" title="Message Client">
@@ -416,13 +476,13 @@
                         </tr>
                         <tr>
                             <td>3</td>
-                            <td>BR-20250615142030</td>
-                            <td>Manufacturing Plus Ltd</td>
-                            <td>Manufacturing</td>
-                            <td>David Brown</td>
-                            <td>2025-06-15 14:20</td>
-                            <td>Amendment</td>
-                            <td><span class="badge status-rejected">Rejected</span></td>
+                            <td>CON-20250615142030</td>
+                            <td>Maria Lopez - <em>Tech Solutions Ltd</em></td>
+                            <td>Technical</td>
+                            <td>2025-06-20 09:00</td>
+                            <td>90 minutes</td>
+                            <td><span class="badge status-cancelled">Cancelled</span></td>
+                            <td><span class="badge payment-unpaid">Unpaid</span></td>
                             <td>
                                 <div class="action-buttons">
                                     <button class="btn btn-sm btn-outline-primary" title="View Details">
@@ -435,6 +495,35 @@
                                         <i class="fas fa-file-alt"></i>
                                     </button>
                                     <button class="btn btn-sm btn-outline-success" title="Message Client">
+                                        <i class="fas fa-comment"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger" title="Archive" >
+                                        <i class="fas fa-archive"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>CON-20250614113020</td>
+                            <td>James Wilson - <em>FarmTech Innovations</em></td>
+                            <td>Initial</td>
+                            <td>2025-06-26 15:00</td>
+                            <td>45 minutes</td>
+                            <td><span class="badge status-rescheduled">Rescheduled</span></td>
+                            <td><span class="badge payment-partial">Partial</span></td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn btn-sm btn-outline-primary" title="View Details" >
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-warning" title="Edit" >
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-info" title="Generate Report" >
+                                        <i class="fas fa-file-alt"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-success" title="Message Client" >
                                         <i class="fas fa-comment"></i>
                                     </button>
                                     <button class="btn btn-sm btn-outline-danger" title="Archive">
@@ -466,35 +555,34 @@
         </div>
     </div>
 
-    <!-- Schedule Registration Modal -->
-    <div class="modal fade" id="businessRegistrationModal" tabindex="-1" aria-labelledby="businessRegistrationModalLabel" aria-hidden="true">
+    <!-- Schedule Consultation Modal -->
+    <div class="modal fade" id="scheduleConsultationModal" tabindex="-1" aria-labelledby="scheduleConsultationModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="businessRegistrationModalLabel">Schedule New Registration</h5>
+                    <h5 class="modal-title" id="scheduleConsultationModalLabel">Schedule New Consultation</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="businessRegistrationForm">
+                    <form id="scheduleConsultationForm">
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="clientName" class="form-label">Client Name *</label>
                                 <input type="text" class="form-control" id="clientName" required>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="companyName" class="form-label">Business Name</label>
+                                <label for="companyName" class="form-label">Company Name</label>
                                 <input type="text" class="form-control" id="companyName">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="RegistrationType" class="form-label">Business Type *</label>
-                                <select class="form-select" id="RegistrationType" required>
+                                <label for="consultationType" class="form-label">Consultation Type *</label>
+                                <select class="form-select" id="consultationType" required>
                                     <option value="">Select Type</option>
-                                    <option value="initial">Product Testing</option>
-                                    <option value="follow-up">Food Audits</option>
-                                    <option value="technical">Dehydration Services</option>
-                                    <option value="technical">Machinery Services</option>
+                                    <option value="initial">Initial Consultation</option>
+                                    <option value="follow-up">Follow-up Consultation</option>
+                                    <option value="technical">Technical Consultation</option>
                                 </select>
                             </div>
                             <div class="col-md-6 mb-3">
@@ -511,18 +599,18 @@
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="RegistrationDate" class="form-label">Date *</label>
-                                <input type="date" class="form-control" id="RegistrationDate" required>
+                                <label for="consultationDate" class="form-label">Date *</label>
+                                <input type="date" class="form-control" id="consultationDate" required>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="RegistrationTime" class="form-label">Time *</label>
-                                <input type="time" class="form-control" id="RegistrationTime" required>
+                                <label for="consultationTime" class="form-label">Time *</label>
+                                <input type="time" class="form-control" id="consultationTime" required>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="RegistrationFee" class="form-label">Registration Fee (GHC)</label>
-                                <input type="number" class="form-control" id="RegistrationFee" step="0.01">
+                                <label for="consultationFee" class="form-label">Consultation Fee (GHC)</label>
+                                <input type="number" class="form-control" id="consultationFee" step="0.01">
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="paymentStatus" class="form-label">Payment Status</label>
@@ -534,8 +622,8 @@
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label for="RegistrationNotes" class="form-label">Notes</label>
-                            <textarea class="form-control" id="RegistrationNotes" rows="3" placeholder="Additional notes about the Registration..."></textarea>
+                            <label for="consultationNotes" class="form-label">Notes</label>
+                            <textarea class="form-control" id="consultationNotes" rows="3" placeholder="Additional notes about the consultation..."></textarea>
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
@@ -551,14 +639,13 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-success" onclick="businessRegistration()">Schedule Registration</button>
+                    <button type="button" class="btn btn-success" onclick="scheduleConsultation()">Schedule Consultation</button>
                 </div>
             </div>
         </div>
     </div>
 
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="./admin-dashboard.js"></script>
+
 </body>
 </html>

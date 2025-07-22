@@ -1,0 +1,199 @@
+{% extends "main/admin-base.html" %}
+{% block title %}FDA Product Applications{% endblock title %}
+{% load crispy_forms_tags %}
+{% load status_tags %}
+{% load humanize %}
+{% block content %}
+
+<main>
+    <div class="container-fluid">
+        <!-- Header Section -->
+        <div class="page-header">
+            <a href="{% url 'admin-dashboard' %}" class="btn btn-sm btn-outline-secondary">
+                <i class="bi bi-arrow-left"></i> Back
+            </a>
+            <h1 class="page-title">Dehydration Services Management</h1>
+            <p class="page-subtitle">Manage Client Dehydration Service Requests and Equipment</p>
+        </div>
+
+        <!-- Search and Filter Section -->
+        <div class="search-filter-section">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <form method="get" class="row g-2 mb-4">
+                        <div class="col-md-6">
+                            <input type="text" name="q" class="form-control" placeholder="Search by ID..." value=" ">
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="bi bi-search"></i> Search
+                            </button>
+                        </div>
+                        <div class="col-md-4">
+                            <button type="reset" class="btn btn-secondary w-100">
+                                <i class="bi bi-x-circle"></i> Clear
+                            </button>
+                    </form>
+                </div>
+                <div class="col-md-2">
+                    <select class="form-select filter-select">
+                        <option value="">All Status</option>
+                        <option value="active">Active</option>
+                        <option value="completed">Completed</option>
+                        <option value="maintenance">Maintenance</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <select class="form-select filter-select">
+                        <option value="">All Services</option>
+                        <option value="equipment">Equipment Rental</option>
+                        <option value="consultation">Consultation</option>
+                        <option value="training">Training</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-success add-btn w-100">
+                        <i class="fas fa-plus"></i> Add Service
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Services Table Section -->
+        <div class="table-section">
+            <h3 class="section-title">Active Services</h3>
+
+            <div class="table-responsive">
+                <table class="table custom-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Service ID</th>
+                            <th>Client Name</th>
+                            <th>Service Type</th>
+                            <th>Equipment Type</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Status</th>
+                            <th>Payment Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>DS-20250624165259</td>
+                            <td>John Doe - <em>ABC Food Processing</em></td>
+                            <td>Equipment Rental</td>
+                            <td>Industrial Dehydrator Model X200</td>
+                            <td>2025-06-24 16:52</td>
+                            <td>2025-12-24 16:52</td>
+                            <td><span class="badge status-active">Active</span></td>
+                            <td><span class="badge payment-paid">Paid</span></td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn btn-sm btn-outline-primary" title="View Details">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-warning" title="Edit">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-info" title="Generate Report">
+                                        <i class="fas fa-file-alt"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-success" title="Message Client">
+                                        <i class="fas fa-comment"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger" title="Archive">
+                                        <i class="fas fa-archive"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>DS-20250617061408</td>
+                            <td>Sarah Johnson - <em>Fresh Fruits Ltd</em></td>
+                            <td>Consultation</td>
+                            <td>N/A</td>
+                            <td>2025-06-17 06:14</td>
+                            <td>2025-06-17 08:14</td>
+                            <td><span class="badge status-completed">Completed</span></td>
+                            <td><span class="badge payment-paid">Paid</span></td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn btn-sm btn-outline-primary" title="View Details">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-warning" title="Edit">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-info" title="Generate Report">
+                                        <i class="fas fa-file-alt"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-success" title="Message Client">
+                                        <i class="fas fa-comment"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger" title="Archive">
+                                        <i class="fas fa-archive"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>DS-20250615142030</td>
+                            <td>Michael Chen - <em>Healthy Snacks Co</em></td>
+                            <td>Training</td>
+                            <td>Equipment Operation Training</td>
+                            <td>2025-06-15 14:20</td>
+                            <td>2025-06-15 18:20</td>
+                            <td><span class="badge status-maintenance">Maintenance</span></td>
+                            <td><span class="badge payment-unpaid">Unpaid</span></td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn btn-sm btn-outline-primary" title="View Details">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-warning" title="Edit">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-info" title="Generate Report">
+                                        <i class="fas fa-file-alt"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-success" title="Message Client">
+                                        <i class="fas fa-comment"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger" title="Archive">
+                                        <i class="fas fa-archive"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination-section">
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1">Previous</a>
+                    </li>
+                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/admin-scripts.js"></script>
+</main>
+</html>

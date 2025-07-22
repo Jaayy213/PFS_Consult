@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Business Registration Applications</title>
+    <title>Machinery Sourcing Requests</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <!-- <link href="./admin.css" rel="stylesheet"> -->
     <style>
         :root {
             --primary-color: #2c3e50;
@@ -14,7 +13,6 @@
             --success-color: #27ae60;
             --warning-color: #f39c12;
             --danger-color: #e74c3c;
-            --info-color: #17a2b8;
             --light-bg: #f8f9fa;
             --border-color: #dee2e6;
         }
@@ -122,38 +120,23 @@
             transition: all 0.2s ease;
         }
 
-        .status-scheduled {
-            background-color: var(--info-color);
+        .status-sourcing {
+            background-color: #ffc107;
+            color: #000;
+        }
+
+        .status-quote-sent {
+            background-color: #17a2b8;
             color: white;
         }
 
-        .status-completed {
-            background-color: var(--success-color);
+        .status-approved {
+            background-color: #28a745;
             color: white;
         }
 
-        .status-cancelled {
-            background-color: var(--danger-color);
-            color: white;
-        }
-
-        .status-rescheduled {
-            background-color: var(--warning-color);
-            color: white;
-        }
-
-        .payment-paid {
-            background-color: var(--success-color);
-            color: white;
-        }
-
-        .payment-unpaid {
-            background-color: var(--danger-color);
-            color: white;
-        }
-
-        .payment-partial {
-            background-color: var(--warning-color);
+        .status-delivered {
+            background-color: #6c757d;
             color: white;
         }
 
@@ -200,6 +183,7 @@
             font-size: 0.9rem;
         }
 
+/* pagination */
         .pagination-section {
             background: white;
             padding: 20px;
@@ -227,6 +211,7 @@
             transition: all 0.2s ease;
         }
 
+
         .modal-header {
             background: var(--primary-color);
             color: white;
@@ -234,40 +219,6 @@
 
         .btn-close {
             filter: invert(1);
-        }
-
-        .calendar-view {
-            background: white;
-            border-radius: 10px;
-            padding: 25px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
-        }
-
-        .time-slot {
-            padding: 8px 12px;
-            margin: 2px;
-            border-radius: 6px;
-            border: 1px solid var(--border-color);
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .time-slot:hover {
-            background-color: var(--secondary-color);
-            color: white;
-            transform: scale(1.05);
-        }
-
-        .time-slot.booked {
-            background-color: var(--danger-color);
-            color: white;
-            cursor: not-allowed;
-        }
-
-        .time-slot.available {
-            background-color: var(--success-color);
-            color: white;
         }
 
         @media (max-width: 768px) {
@@ -282,10 +233,6 @@
             .custom-table {
                 font-size: 0.85rem;
             }
-
-            .stat-card {
-                margin-bottom: 15px;
-            }
         }
     </style>
 </head>
@@ -296,8 +243,36 @@
             <button class="btn btn-outline-light mb-3" onclick="history.back()">
                 <i class="fas fa-arrow-left"></i> Back
             </button>
-            <h1 class="page-title">Business Registration Applications</h1>
-            <p class="page-subtitle">Process and Monitor Business Registration Requests</p>
+            <h1 class="page-title">Machinery Sourcing Requests</h1>
+            <p class="page-subtitle">Track Equipment Sourcing and Procurement</p>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="row stats-cards">
+            <div class="col-md-3 col-6 mb-3">
+                <div class="stat-card">
+                    <div class="stat-number text-warning">12</div>
+                    <div class="stat-label">Active Requests</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-3">
+                <div class="stat-card">
+                    <div class="stat-number text-info">8</div>
+                    <div class="stat-label">Quotes Sent</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-3">
+                <div class="stat-card">
+                    <div class="stat-number text-success">15</div>
+                    <div class="stat-label">Approved</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-3">
+                <div class="stat-card">
+                    <div class="stat-number text-secondary">23</div>
+                    <div class="stat-label">Delivered</div>
+                </div>
+            </div>
         </div>
 
         <!-- Search and Filter Section -->
@@ -305,66 +280,69 @@
             <div class="row g-3">
                 <div class="col-md-6">
                     <div class="search-box">
-                        <input type="text" class="form-control" placeholder="Search by Business Name, Registration Type...">
-                        <button class="btn btn-primary search-btn">
+                        <input type="text" class="form-control" id="searchInput" placeholder="Search by Client Name, Equipment Type...">
+                        <button class="btn btn-primary search-btn" >
                             <i class="fas fa-search"></i> Search
                         </button>
                     </div>
                 </div>
                 <div class="col-md-2">
-                    <select class="form-select filter-select">
+                    <select class="form-select filter-select" id="statusFilter" >
                         <option value="">All Status</option>
-                        <option value="under-review">Under Review</option>
+                        <option value="sourcing">Sourcing</option>
+                        <option value="quote-sent">Quote Sent</option>
                         <option value="approved">Approved</option>
-                        <option value="rejected">Rejected</option>
-                        <option value="pending">Pending Documents</option>
+                        <option value="delivered">Delivered</option>
                     </select>
                 </div>
                 <div class="col-md-2">
-                    <select class="form-select filter-select">
-                        <option value="">All Types</option>
-                        <option value="new">New</option>
-                        <option value="renewal">Renewal</option>
-                        <option value="amendment">Amendment</option>
+                    <select class="form-select filter-select" id="equipmentFilter">
+                        <option value="">All Equipment</option>
+                        <option value="processing">Processing</option>
+                        <option value="packaging">Packaging</option>
+                        <option value="testing">Testing</option>
+                        <option value="storage">Storage</option>
                     </select>
                 </div>
                 <div class="col-md-2">
-                    <button class="btn btn-success add-btn w-100" data-bs-toggle="modal" data-bs-target="#businessRegistrationModal">
-                        <i class="fas fa-plus"></i> Register
+                    <button class="btn btn-success add-btn w-100" data-bs-toggle="modal" data-bs-target="#newRequestModal">
+                        <i class="fas fa-plus"></i> New Request
                     </button>
                 </div>
             </div>
         </div>
 
-        <!-- Registration Applications Table Section -->
+        <!-- Sourcing Requests Table Section -->
         <div class="table-section">
-            <h3 class="section-title">Registration Applications</h3>
+            <h3 class="section-title">Sourcing Requests</h3>
 
             <div class="table-responsive">
-                <table class="table custom-table">
+                <table class="table custom-table" id="requestsTable">
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Registration ID</th>
-                            <th>Business Name</th>
-                            <th>Business Type</th>
-                            <th>Applicant Name</th>
-                            <th>Submission Date</th>
-                            <th>Registration Type</th>
+                            <th>Request ID</th>
+                            <th>Client Name</th>
+                            <th>Equipment Type</th>
+                            <th>Specifications</th>
+                            <th>Budget Range</th>
+                            <th>Request Date</th>
                             <th>Status</th>
+                            <th>Supplier</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="requestsTableBody">
                         <tr>
                             <td>1</td>
-                            <td>BR-20250624165259</td>
-                            <td>Global Tech Solutions</td>
-                            <td>Technology Services</td>
-                            <td>Alex Johnson</td>
+                            <td>MS-20250624165259</td>
+                            <td>Tech Manufacturing - <em>John Smith</em></td>
+                            <td>Processing Equipment</td>
+                            <td>Industrial Mixer, 500L capacity, Stainless Steel</td>
+                            <td>GHC15,000 - GHC25,000</td>
                             <td>2025-06-24 16:52</td>
-                            <td>New</td>
-                            <td><span class="badge status-under-review">Under Review</span></td>
+                            <td><span class="badge status-sourcing">Sourcing</span></td>
+                            <td>TBD</td>
                             <td>
                                 <div class="action-buttons">
                                     <button class="btn btn-sm btn-outline-primary" title="View Details">
@@ -373,72 +351,104 @@
                                     <button class="btn btn-sm btn-outline-warning" title="Edit">
                                         <i class="fas fa-edit"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-outline-info" title="Generate Report">
+                                    <button class="btn btn-sm btn-outline-info" title="Generate Report" >
                                         <i class="fas fa-file-alt"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-outline-success" title="Message Client">
+                                    <button class="btn btn-sm btn-outline-success" title="Message Client" >
                                         <i class="fas fa-comment"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-outline-danger" title="Archive">
-                                        <i class="fas fa-archive"></i>
+                                    <button class="btn btn-sm btn-outline-danger" title="Delete" >
+                                        <i class="fas fa-trash"></i>
                                     </button>
                                 </div>
                             </td>
                         </tr>
                         <tr>
                             <td>2</td>
-                            <td>BR-20250617061408</td>
-                            <td>Fresh Market Enterprises</td>
-                            <td>Retail/Food</td>
-                            <td>Sarah Wilson</td>
-                            <td>2025-06-17 06:14</td>
-                            <td>Renewal</td>
-                            <td><span class="badge status-approved">Approved</span></td>
+                            <td>MS-20250620142018</td>
+                            <td>Global Foods Inc - <em>Sarah Johnson</em></td>
+                            <td>Packaging Equipment</td>
+                            <td>Automated Sealing Machine, 200 units/min</td>
+                            <td>GHC30,000 - GHC45,000</td>
+                            <td>2025-06-20 14:20</td>
+                            <td><span class="badge status-quote-sent">Quote Sent</span></td>
+                            <td>PackTech Solutions</td>
                             <td>
                                 <div class="action-buttons">
                                     <button class="btn btn-sm btn-outline-primary" title="View Details">
                                         <i class="fas fa-eye"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-outline-warning" title="Edit">
+                                    <button class="btn btn-sm btn-outline-warning" title="Edit" >
                                         <i class="fas fa-edit"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-outline-info" title="Generate Report">
+                                    <button class="btn btn-sm btn-outline-info" title="Generate Report" >
                                         <i class="fas fa-file-alt"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-outline-success" title="Message Client">
+                                    <button class="btn btn-sm btn-outline-success" title="Message Client" >
                                         <i class="fas fa-comment"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-outline-danger" title="Archive">
-                                        <i class="fas fa-archive"></i>
+                                    <button class="btn btn-sm btn-outline-danger" title="Delete" >
+                                        <i class="fas fa-trash"></i>
                                     </button>
                                 </div>
                             </td>
                         </tr>
                         <tr>
                             <td>3</td>
-                            <td>BR-20250615142030</td>
-                            <td>Manufacturing Plus Ltd</td>
-                            <td>Manufacturing</td>
-                            <td>David Brown</td>
-                            <td>2025-06-15 14:20</td>
-                            <td>Amendment</td>
-                            <td><span class="badge status-rejected">Rejected</span></td>
+                            <td>MS-20250618093045</td>
+                            <td>Quality Labs - <em>Michael Brown</em></td>
+                            <td>Testing Equipment</td>
+                            <td>Material Testing System, Universal Testing Machine</td>
+                            <td>GHC50,000 - GHC75,000</td>
+                            <td>2025-06-18 09:30</td>
+                            <td><span class="badge status-approved">Approved</span></td>
+                            <td>TestEquip Corp</td>
                             <td>
                                 <div class="action-buttons">
-                                    <button class="btn btn-sm btn-outline-primary" title="View Details">
+                                    <button class="btn btn-sm btn-outline-primary" title="View Details" >
                                         <i class="fas fa-eye"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-outline-warning" title="Edit">
+                                    <button class="btn btn-sm btn-outline-warning" title="Edit" >
                                         <i class="fas fa-edit"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-outline-info" title="Generate Report">
+                                    <button class="btn btn-sm btn-outline-info" title="Generate Report" >
                                         <i class="fas fa-file-alt"></i>
                                     </button>
                                     <button class="btn btn-sm btn-outline-success" title="Message Client">
                                         <i class="fas fa-comment"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-outline-danger" title="Archive">
-                                        <i class="fas fa-archive"></i>
+                                    <button class="btn btn-sm btn-outline-danger" title="Delete">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>MS-20250615161255</td>
+                            <td>Storage Solutions Ltd - <em>Emma Wilson</em></td>
+                            <td>Storage Equipment</td>
+                            <td>Cold Storage Unit, 1000 cubic feet, -20°C</td>
+                            <td>GHC25,000 - GHC40,000</td>
+                            <td>2025-06-15 16:12</td>
+                            <td><span class="badge status-delivered">Delivered</span></td>
+                            <td>CoolTech Industries</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn btn-sm btn-outline-primary" title="View Details" >
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-warning" title="Edit">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-info" title="Generate Report" >
+                                        <i class="fas fa-file-alt"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-success" title="Message Client">
+                                        <i class="fas fa-comment"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger" title="Delete">
+                                        <i class="fas fa-trash"></i>
                                     </button>
                                 </div>
                             </td>
@@ -447,8 +457,7 @@
                 </table>
             </div>
         </div>
-
-        <!-- Pagination -->
+<!-- Pagination Section -->
         <div class="pagination-section">
             <nav aria-label="Page navigation">
                 <ul class="pagination justify-content-center">
@@ -466,99 +475,71 @@
         </div>
     </div>
 
-    <!-- Schedule Registration Modal -->
-    <div class="modal fade" id="businessRegistrationModal" tabindex="-1" aria-labelledby="businessRegistrationModalLabel" aria-hidden="true">
+    <!-- New Request Modal -->
+    <div class="modal fade" id="newRequestModal" tabindex="-1" aria-labelledby="newRequestModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="businessRegistrationModalLabel">Schedule New Registration</h5>
+                    <h5 class="modal-title" id="newRequestModalLabel">New Machinery Sourcing Request</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="businessRegistrationForm">
+                    <form id="newRequestForm">
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="clientName" class="form-label">Client Name *</label>
                                 <input type="text" class="form-control" id="clientName" required>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="companyName" class="form-label">Business Name</label>
-                                <input type="text" class="form-control" id="companyName">
+                                <label for="contactPerson" class="form-label">Contact Person *</label>
+                                <input type="text" class="form-control" id="contactPerson" required>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="RegistrationType" class="form-label">Business Type *</label>
-                                <select class="form-select" id="RegistrationType" required>
-                                    <option value="">Select Type</option>
-                                    <option value="initial">Product Testing</option>
-                                    <option value="follow-up">Food Audits</option>
-                                    <option value="technical">Dehydration Services</option>
-                                    <option value="technical">Machinery Services</option>
+                                <label for="equipmentType" class="form-label">Equipment Type *</label>
+                                <select class="form-select" id="equipmentType" required>
+                                    <option value="">Select Equipment Type</option>
+                                    <option value="processing">Processing Equipment</option>
+                                    <option value="packaging">Packaging Equipment</option>
+                                    <option value="testing">Testing Equipment</option>
+                                    <option value="storage">Storage Equipment</option>
                                 </select>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="duration" class="form-label">Duration *</label>
-                                <select class="form-select" id="duration" required>
-                                    <option value="">Select Duration</option>
-                                    <option value="30">30 minutes</option>
-                                    <option value="45">45 minutes</option>
-                                    <option value="60">60 minutes</option>
-                                    <option value="90">90 minutes</option>
-                                    <option value="120">120 minutes</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="RegistrationDate" class="form-label">Date *</label>
-                                <input type="date" class="form-control" id="RegistrationDate" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="RegistrationTime" class="form-label">Time *</label>
-                                <input type="time" class="form-control" id="RegistrationTime" required>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="RegistrationFee" class="form-label">Registration Fee (GHC)</label>
-                                <input type="number" class="form-control" id="RegistrationFee" step="0.01">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="paymentStatus" class="form-label">Payment Status</label>
-                                <select class="form-select" id="paymentStatus">
-                                    <option value="unpaid">Unpaid</option>
-                                    <option value="paid">Paid</option>
-                                    <option value="partial">Partial</option>
-                                </select>
+                                <label for="budgetRange" class="form-label">Budget Range *</label>
+                                <input type="text" class="form-control" id="budgetRange" placeholder="e.g. GHC10,000 - GHC20,000" required>
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label for="RegistrationNotes" class="form-label">Notes</label>
-                            <textarea class="form-control" id="RegistrationNotes" rows="3" placeholder="Additional notes about the Registration..."></textarea>
+                            <label for="specifications" class="form-label">Specifications *</label>
+                            <textarea class="form-control" id="specifications" rows="4" placeholder="Detailed equipment specifications..." required></textarea>
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="clientEmail" class="form-label">Client Email</label>
-                                <input type="email" class="form-control" id="clientEmail">
+                                <label for="urgency" class="form-label">Urgency Level</label>
+                                <select class="form-select" id="urgency">
+                                    <option value="low">Low</option>
+                                    <option value="medium" selected>Medium</option>
+                                    <option value="high">High</option>
+                                </select>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="clientPhone" class="form-label">Client Phone</label>
-                                <input type="tel" class="form-control" id="clientPhone">
+                                <label for="deliveryDate" class="form-label">Expected Delivery Date</label>
+                                <input type="date" class="form-control" id="deliveryDate">
                             </div>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-success" onclick="businessRegistration()">Schedule Registration</button>
+                    <button type="button" class="btn btn-success" >Submit Request</button>
                 </div>
             </div>
         </div>
     </div>
 
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="./admin-dashboard.js"></script>
+
 </body>
 </html>
